@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:alpine-jre
-ADD target/Assignment-0.0.1-SNAPSHOT.jar application.jar
-ENTRYPOINT [ "java","-jar","application.jar" ]
-CMD ["-start"]
+FROM openjdk:11
+ADD target/blog-api-docker.jar blog-api-docker.jar
+ENTRYPOINT ["java", "-jar","blog-api-docker.jar"]
+EXPOSE 8080

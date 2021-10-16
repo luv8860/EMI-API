@@ -1,14 +1,19 @@
 version: '3.1'
 services:
-  app:
-    container_name: springboot-postgresql
-    image: springboot-postgresql
-    build: ./
+  API:
+    image: 'blog-api-docker.jar'
     ports:
-      - "8085:8085"
+      - "8080:8080"
     depends_on:
-      - postgresqldb
-  postgresqldb:
+      PostgreSQL:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://PostgreSQL:5432/products_table
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=Rapipay02
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  PostgreSQL:
     image: postgres
     ports:
       - "5432:5432"
@@ -16,3 +21,8 @@ services:
       - POSTGRES_PASSWORD=Rapipay02
       - POSTGRES_USER=postgres
       - POSTGRES_DB=products_table
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
